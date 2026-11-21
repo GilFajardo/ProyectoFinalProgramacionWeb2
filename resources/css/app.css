@@ -2,8 +2,80 @@
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+@source '../../app/Enums/*.php';
 
+/*
+ * Tema institucional de Vinculación en Línea (UPSLP).
+ * "marca" es el azul institucional; "acento" un dorado para llamadas a la acción.
+ */
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-marca-50: #eef4fb;
+    --color-marca-100: #d6e4f5;
+    --color-marca-200: #adc8ea;
+    --color-marca-300: #7ea7db;
+    --color-marca-400: #4d7fc6;
+    --color-marca-500: #2b5fa8;
+    --color-marca-600: #1a4b8f;
+    --color-marca-700: #0b3c7a;
+    --color-marca-800: #0a3062;
+    --color-marca-900: #08244a;
+    --color-marca-950: #051631;
+
+    --color-acento-400: #f5c04a;
+    --color-acento-500: #e9a91c;
+    --color-acento-600: #c98a0c;
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+/* Componentes reutilizables de formularios y botones (utilidades propias de Tailwind 4). */
+@utility btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+@utility btn-primario {
+        @apply btn bg-marca-700 text-white shadow-sm hover:bg-marca-800 focus-visible:outline-marca-700;
+}
+
+@utility btn-acento {
+        @apply btn bg-acento-500 text-marca-950 shadow-sm hover:bg-acento-400 focus-visible:outline-acento-500;
+}
+
+@utility btn-secundario {
+        @apply btn bg-white text-slate-700 ring-1 ring-slate-300 ring-inset hover:bg-slate-50 focus-visible:outline-marca-700;
+}
+
+@utility btn-peligro {
+        @apply btn bg-red-600 text-white hover:bg-red-700 focus-visible:outline-red-600;
+}
+
+@utility campo-label {
+        @apply mb-1 block text-sm font-medium text-slate-700;
+}
+
+@utility campo {
+        @apply block w-full rounded-lg border-0 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm ring-1 ring-slate-300 ring-inset placeholder:text-slate-400 focus:ring-2 focus:ring-marca-600 focus:ring-inset;
+}
+
+@utility campo-error {
+        @apply ring-red-400 focus:ring-red-500;
+}
+
+@utility tarjeta {
+        @apply rounded-2xl bg-white shadow-sm ring-1 ring-slate-200;
+}
+
+@utility enlace {
+        @apply font-medium text-marca-700 underline-offset-2 hover:underline;
 }

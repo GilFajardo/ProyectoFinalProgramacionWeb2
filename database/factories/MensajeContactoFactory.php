@@ -18,7 +18,17 @@ class MensajeContactoFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'nombre' => fake()->name(),
+            'email' => fake()->safeEmail(),
+            'asunto' => fake()->randomElement([
+                'Información para registrar mi empresa',
+                'Problema al subir mi CV',
+                'Duda sobre estadías profesionales',
+                'Solicitud de convenio de vinculación',
+            ]),
+            'mensaje' => fake()->paragraph(3),
+            'ip' => fake()->ipv4(),
+            'leido' => fake()->boolean(40),
         ];
     }
 }

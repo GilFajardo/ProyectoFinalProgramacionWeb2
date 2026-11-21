@@ -86,6 +86,34 @@ class Vacante extends Model
     }
 
     /**
+     * Etiqueta singular de un estado de vigencia (para insignias).
+     */
+    public static function etiquetaVigencia(string $estado): string
+    {
+        return match ($estado) {
+            self::VIGENCIA_VIGENTE => 'Vigente',
+            self::VIGENCIA_POR_VENCER => 'Por vencer',
+            self::VIGENCIA_PROGRAMADA => 'Programada',
+            self::VIGENCIA_VENCIDA => 'Vencida',
+            default => 'Inactiva',
+        };
+    }
+
+    /**
+     * Color de Filament asociado a un estado de vigencia.
+     */
+    public static function colorVigencia(string $estado): string
+    {
+        return match ($estado) {
+            self::VIGENCIA_VIGENTE => 'success',
+            self::VIGENCIA_POR_VENCER => 'warning',
+            self::VIGENCIA_PROGRAMADA => 'info',
+            self::VIGENCIA_VENCIDA => 'danger',
+            default => 'gray',
+        };
+    }
+
+    /**
      * @return BelongsTo<Empresa, $this>
      */
     public function empresa(): BelongsTo
@@ -185,11 +213,15 @@ class Vacante extends Model
         $like = '%'.str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $termino).'%';
 
         $query->where(function (Builder $q) use ($like, $palabras, $usaFullText): void {
+            // El título siempre se compara con LIKE: así se encuentran palabras largas aunque
+            // el servidor tenga un innodb_ft_max_token_size bajo (WAMP usa 10 por defecto).
+            $q->where('titulo', 'like', $like);
+
             if ($usaFullText) {
                 $booleano = $palabras->map(fn (string $palabra): string => '+'.$palabra.'*')->implode(' ');
-                $q->whereFullText(['titulo', 'descripcion'], $booleano, ['mode' => 'boolean']);
+                $q->orWhereFullText(['titulo', 'descripcion'], $booleano, ['mode' => 'boolean']);
             } else {
-                $q->where('titulo', 'like', $like)->orWhere('descripcion', 'like', $like);
+                $q->orWhere('descripcion', 'like', $like);
             }
 
             $q->orWhereHas('empresa', fn (Builder $empresa) => $empresa->where('nombre', 'like', $like));
