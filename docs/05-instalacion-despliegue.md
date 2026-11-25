@@ -429,6 +429,18 @@ php artisan up
 
 > Una migración ya ejecutada en producción **no se edita**. Cualquier cambio de esquema va en una migración nueva (`php artisan make:migration ...`).
 
+### 10.8 Despliegue con Docker y Coolify (VPS)
+
+El repositorio incluye un `Dockerfile` (PHP 8.4 + Nginx con la imagen `serversideup/php`, puerto **8080**). La imagen compila los assets y, en cada arranque, ejecuta `storage:link`, `migrate --force`, `optimize`, el `CategoriaSeeder` y `filament:optimize` (ver `docker/entrypoint.d/`).
+
+1. En Coolify, crea en el mismo proyecto un recurso **MySQL 8**. Anota el *host interno*, la base, el usuario y la contraseña.
+2. Agrega la aplicación desde el repositorio de GitHub con *Build Pack* **Dockerfile** y *Ports Exposes* **8080**. Asigna el dominio con `https://`.
+3. En *Environment Variables* define al menos: `APP_KEY` (genera una con `php artisan key:generate --show`), `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL`, `APP_LOCALE=es`, `DB_CONNECTION=mysql`, `DB_HOST`, `DB_PORT=3306`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`, `SESSION_DRIVER=database`, `SESSION_SECURE_COOKIE=true`, `CACHE_STORE=database`, `QUEUE_CONNECTION=sync` y `LOG_CHANNEL=stderr`.
+4. En *Persistent Storage* agrega un volumen con destino `/var/www/html/storage/app` para no perder logotipos, fotografías ni documentos del CV en cada despliegue.
+5. Despliega. Para crear los usuarios de prueba, abre la *Terminal* del contenedor en Coolify y ejecuta `php artisan db:seed --class=UsuarioPruebaSeeder --force`.
+
+Para probar la imagen en tu equipo: `docker build -t vinculacion .`
+
 ---
 
 ## 11. Solución de problemas
