@@ -150,7 +150,7 @@ El diseño completo (diagrama ER y diccionario de datos) está en [`01-arquitect
 |---|---|---|
 | `CategoriaSeeder` | Las 12 categorías obligatorias (idempotente) | **Sí** |
 | `UsuarioPruebaSeeder` | Los 3 usuarios de prueba de la tabla de abajo | Sí, para la revisión del proyecto; después cambia las contraseñas |
-| `DatosDemoSeeder` | 8 empresas ficticias de SLP, unas 36 vacantes, 25 alumnos con CV, unas 56 postulaciones y 8 mensajes | Opcional (demostración) |
+| `DatosDemoSeeder` | 12 empresas ficticias de SLP, unas 90 vacantes en las 12 áreas, 45 alumnos con CV, unas 280 postulaciones y 12 mensajes. No se duplica si se ejecuta dos veces. En producción necesita Faker (ver 10.8) | Opcional (demostración) |
 
 ### Credenciales de prueba
 
@@ -438,6 +438,15 @@ El repositorio incluye un `Dockerfile` (PHP 8.4 + Nginx con la imagen `serversid
 3. En *Environment Variables* define al menos: `APP_KEY` (genera una con `php artisan key:generate --show`), `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL`, `APP_LOCALE=es`, `DB_CONNECTION=mysql`, `DB_HOST`, `DB_PORT=3306`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`, `SESSION_DRIVER=database`, `SESSION_SECURE_COOKIE=true`, `CACHE_STORE=database`, `QUEUE_CONNECTION=sync` y `LOG_CHANNEL=stderr`.
 4. En *Persistent Storage* agrega un volumen con destino `/var/www/html/storage/app` para no perder logotipos, fotografías ni documentos del CV en cada despliegue.
 5. Despliega. Para crear los usuarios de prueba, abre la *Terminal* del contenedor en Coolify y ejecuta `php artisan db:seed --class=UsuarioPruebaSeeder --force`.
+
+**Datos de demostración en el contenedor.** La imagen no incluye Faker (es una dependencia de desarrollo), así que se instala de forma temporal en la *Terminal* del contenedor y luego se ejecuta el seeder:
+
+```bash
+composer require fakerphp/faker --no-interaction
+php artisan db:seed --class=DatosDemoSeeder --force
+```
+
+Faker desaparece en el siguiente despliegue, porque la imagen se vuelve a construir desde el repositorio; los datos se quedan en la base.
 
 Para probar la imagen en tu equipo: `docker build -t vinculacion .`
 

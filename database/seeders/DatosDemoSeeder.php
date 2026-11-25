@@ -37,13 +37,29 @@ class DatosDemoSeeder extends Seeder
         ['nombre' => 'Colegio Bilingüe Las Lomas', 'rfc' => 'CBL050830RT6', 'sector' => 'Educación', 'categorias' => ['educacion', 'comunicaciones', 'tecnologia-de-la-informacion']],
         ['nombre' => 'Clínica Integral del Centro', 'rfc' => 'CIC110407YU7', 'sector' => 'Salud', 'categorias' => ['salud', 'contabilidad-y-administracion', 'derecho-y-leyes']],
         ['nombre' => 'Centro de Conservación Fauna Potosina', 'rfc' => 'CCF160921OP8', 'sector' => 'Medio ambiente', 'categorias' => ['zoologia', 'educacion', 'diseno']],
+        ['nombre' => 'Xilitla Labs Software', 'rfc' => 'XLS190603AB9', 'sector' => 'Tecnología', 'categorias' => ['tecnologia-de-la-informacion', 'diseno', 'ingenieria']],
+        ['nombre' => 'Agroindustrias de la Huasteca', 'rfc' => 'AHU080115CD1', 'sector' => 'Agroindustria', 'categorias' => ['ingenieria', 'manufactura', 'contabilidad-y-administracion']],
+        ['nombre' => 'Hotel Real de Catorce', 'rfc' => 'HRC140722EF2', 'sector' => 'Turismo', 'categorias' => ['mercadotecnia', 'comunicaciones', 'contabilidad-y-administracion']],
+        ['nombre' => 'Despacho Jurídico Tangamanga', 'rfc' => 'DJT100309GH3', 'sector' => 'Servicios legales', 'categorias' => ['derecho-y-leyes', 'contabilidad-y-administracion', 'comunicaciones']],
+        ['nombre' => 'Laboratorios Clínicos Potosinos', 'rfc' => 'LCP130418JK4', 'sector' => 'Salud', 'categorias' => ['salud', 'tecnologia-de-la-informacion', 'educacion']],
     ];
+
+    /**
+     * Alumnos ficticios con CV que se crean además del alumno de prueba.
+     */
+    private const int ALUMNOS = 45;
 
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
+        if (Empresa::withTrashed()->where('rfc', self::EMPRESAS[0]['rfc'])->exists()) {
+            $this->command?->warn('Los datos de demostración ya existen; no se vuelven a crear.');
+
+            return;
+        }
+
         $categorias = Categoria::all()->keyBy('slug');
 
         $this->crearVacantesTecnoSoft($categorias);
@@ -59,7 +75,7 @@ class DatosDemoSeeder extends Seeder
             $reclutadores = Reclutador::factory()->count(fake()->numberBetween(1, 2))->for($empresa)->create();
 
             foreach ($datos['categorias'] as $slug) {
-                $this->crearVacantes($empresa, $reclutadores->random(), $categorias[$slug], fake()->numberBetween(1, 2));
+                $this->crearVacantes($empresa, $reclutadores->random(), $categorias[$slug], fake()->numberBetween(2, 3));
             }
         }
 
@@ -70,7 +86,7 @@ class DatosDemoSeeder extends Seeder
 
         $this->crearPostulaciones($alumnos);
 
-        MensajeContacto::factory()->count(8)->create();
+        MensajeContacto::factory()->count(12)->create();
     }
 
     /**
@@ -140,7 +156,7 @@ class DatosDemoSeeder extends Seeder
             'diseno' => ['Photoshop', 'Figma', 'Illustrator'],
         ];
 
-        $alumnos = Alumno::factory()->count(24)->create();
+        $alumnos = Alumno::factory()->count(self::ALUMNOS)->create();
 
         foreach ($alumnos as $alumno) {
             CvFormacion::factory()->upslp($alumno->carrera)->for($alumno)->create();
@@ -170,7 +186,7 @@ class DatosDemoSeeder extends Seeder
         $vacantes = Vacante::whereDate('fecha_inicio', '<=', today())->get();
 
         foreach ($vacantes as $vacante) {
-            $postulantes = $alumnos->random(min($alumnos->count(), fake()->numberBetween(0, 4)));
+            $postulantes = $alumnos->random(min($alumnos->count(), fake()->numberBetween(1, 6)));
 
             foreach ($postulantes as $alumno) {
                 $estatus = fake()->randomElement([

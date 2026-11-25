@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Vinculación en Línea — Documento técnico para la exposición</title>
+<style>
+  @page { size: Letter; margin: 13mm 17mm 13mm 17mm; }
+  :root {
+    --marca: #0b3c7a; --marca-2: #2b5fa8; --marca-claro: #eef4fb; --marca-linea: #adc8ea;
+    --acento: #c98a0c; --acento-claro: #fdf4e1;
+    --tinta: #1d2433; --gris: #5b6474; --linea: #d9dee7; --fondo: #f6f8fb;
+    --ok: #1f7a4d; --ok-claro: #e6f4ec; --mal: #b3261e; --mal-claro: #fbeaea;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif; color: var(--tinta);
+         font-size: 9.8pt; line-height: 1.45; margin: 0; }
+  h1, h2, h3 { color: var(--marca); line-height: 1.2; margin: 0; }
+  h2 { font-size: 17pt; margin: 0 0 4mm; padding-bottom: 2mm; border-bottom: 2px solid var(--marca); }
+  h2 .num { color: var(--acento); margin-right: 2mm; }
+  h3 { font-size: 11.5pt; margin: 5mm 0 2mm; }
+  p { margin: 0 0 2.6mm; }
+  ul, ol { margin: 0 0 3mm; padding-left: 5.5mm; }
+  li { margin-bottom: 1mm; }
+  code { font-family: Consolas, "Cascadia Mono", monospace; font-size: 8.9pt; background: var(--fondo);
+         border: 1px solid var(--linea); border-radius: 3px; padding: 0 1.2mm; }
+  .seccion { break-before: page; }
+  .no-romper { break-inside: avoid; }
+  .lead { font-size: 10.8pt; color: var(--gris); margin-bottom: 4mm; }
+
+  table { width: 100%; border-collapse: collapse; margin: 1mm 0 4mm; font-size: 9.3pt; break-inside: avoid; }
+  th { background: var(--marca); color: #fff; text-align: left; font-weight: 600; padding: 1.6mm 2.2mm; }
+  td { padding: 1.5mm 2.2mm; border-bottom: 1px solid var(--linea); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--fondo); }
+  td:first-child { font-weight: 600; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3.5mm; }
+  .tarjeta { border: 1px solid var(--linea); border-radius: 2.5mm; padding: 3mm 3.5mm; background: #fff; break-inside: avoid; }
+  .tarjeta h4 { margin: 0 0 1.5mm; font-size: 10.4pt; color: var(--marca); }
+  .tarjeta p, .tarjeta ul { font-size: 9.3pt; margin-bottom: 0; }
+  .etiqueta { display: inline-block; font-size: 7.8pt; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+              color: var(--acento); margin-bottom: 1mm; }
+
+  .nota { border-left: 3.5px solid var(--acento); background: var(--acento-claro); padding: 2.5mm 3.5mm; border-radius: 0 2mm 2mm 0;
+          margin: 3mm 0 4mm; font-size: 9.5pt; break-inside: avoid; }
+  .nota strong { color: #7a5200; }
+  .decir { border-left: 3.5px solid var(--marca-2); background: var(--marca-claro); padding: 2.5mm 3.5mm; border-radius: 0 2mm 2mm 0;
+           margin: 3mm 0 4mm; font-size: 9.5pt; break-inside: avoid; }
+  .decir::before { content: "Cómo explicarlo"; display: block; font-weight: 700; font-size: 8pt; text-transform: uppercase;
+                   letter-spacing: .05em; color: var(--marca-2); margin-bottom: 1mm; }
+  figure { margin: 2mm 0 4mm; break-inside: avoid; }
+  figcaption { font-size: 8.6pt; color: var(--gris); text-align: center; margin-top: 1.5mm; }
+  svg { display: block; width: 100%; height: auto; }
+  svg text { font-family: "Segoe UI", system-ui, Arial, sans-serif; }
+
+  /* Portada */
+  .portada { height: 232mm; display: flex; flex-direction: column; justify-content: space-between; }
+  .portada .banda { background: var(--marca); color: #fff; border-radius: 4mm; padding: 14mm 12mm 12mm; position: relative; overflow: hidden; }
+  .portada .banda::after { content: ""; position: absolute; right: -20mm; top: -20mm; width: 80mm; height: 80mm; border-radius: 50%;
+                           background: rgba(233,169,28,.18); }
+  .portada .kicker { color: #e9a91c; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: 9pt; }
+  .portada h1 { color: #fff; font-size: 34pt; margin: 4mm 0 3mm; letter-spacing: -.01em; }
+  .portada .sub { font-size: 13pt; color: #d6e4f5; max-width: 140mm; }
+  .portada .datos { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm 8mm; font-size: 10pt; }
+  .portada .datos div span { display: block; color: var(--gris); font-size: 8.4pt; text-transform: uppercase; letter-spacing: .06em; }
+  .portada .datos div strong { font-weight: 600; }
+  .indice { columns: 2; column-gap: 10mm; font-size: 10pt; padding-left: 5mm; }
+  .indice li { margin-bottom: 1.4mm; break-inside: avoid; }
+
+  .cifras { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin: 3mm 0 5mm; }
+  .cifra { background: var(--marca-claro); border-radius: 2.5mm; padding: 3mm; text-align: center; }
+  .cifra b { display: block; font-size: 19pt; color: var(--marca); line-height: 1.1; }
+  .cifra span { font-size: 8.4pt; color: var(--gris); }
+
+  .pregunta { break-inside: avoid; margin-bottom: 3.2mm; }
+  .pregunta b { color: var(--marca); display: block; margin-bottom: .6mm; }
+  .pregunta p { font-size: 9.5pt; margin: 0; }
+  .compacta figure svg { width: 86%; margin: 0 auto; }
+  .compacta td { padding: 1.1mm 2mm; }
+  .compacta .tarjeta li { margin-bottom: .4mm; }
+  .compacta .lead { margin-bottom: 2.5mm; }
+  .pie { font-size: 8.3pt; color: var(--gris); border-top: 1px solid var(--linea); padding-top: 2mm; margin-top: 6mm; }
+</style>
+</head>
+<body>
+
+<!-- ============ PORTADA ============ -->
+<section class="portada">
+  <div class="banda">
+    <div class="kicker">Documento técnico · Apoyo para la exposición</div>
+    <h1>Vinculación en Línea</h1>
+    <div class="sub">Bolsa de trabajo de la UPSLP que conecta a alumnos con empresas: arquitectura, base de datos, flujos principales y despliegue.</div>
+  </div>
+
+  <div>
+    <h3 style="margin-top:0">Contenido</h3>
+    <ol class="indice">
+      <li>Visión general del sistema</li>
+      <li>Arquitectura de la aplicación</li>
+      <li>Ciclo de una petición</li>
+      <li>Base de datos: modelo entidad-relación</li>
+      <li>Tablas, llaves e índices clave</li>
+      <li>Flujos principales</li>
+      <li>Reglas de negocio y seguridad</li>
+      <li>Reportes PDF y estadísticas</li>
+      <li>Despliegue: Docker + Coolify</li>
+      <li>Pruebas y calidad</li>
+      <li>Guion y preguntas probables</li>
+    </ol>
+  </div>
+
+  <div class="datos">
+    <div><span>Materia</span><strong>Programación Web II (LC34 / T15A)</strong></div>
+    <div><span>Institución</span><strong>Universidad Politécnica de San Luis Potosí · ITI</strong></div>
+    <div><span>Docente</span><strong>Dra. Roxana G. Herrera</strong></div>
+    <div><span>Periodo</span><strong>Otoño 2026</strong></div>
+    <div><span>Autor</span><strong>José Gilberto Fajardo Zapata · 182006</strong></div>
+    <div><span>Sitio publicado</span><strong>https://upslpvincula.tech</strong></div>
+  </div>
+</section>
+
+<!-- ============ 1. VISIÓN GENERAL ============ -->
+<section class="seccion">
+  <h2><span class="num">1</span>Visión general del sistema</h2>
+  <p class="lead">Vinculación en Línea es una bolsa de trabajo institucional: las empresas publican vacantes, los alumnos arman su CV y se postulan, y la universidad administra todo desde un panel central.</p>
+
+  <div class="cifras">
+    <div class="cifra"><b>3</b><span>roles con su propia área</span></div>
+    <div class="cifra"><b>14</b><span>migraciones / tablas de negocio e infraestructura</span></div>
+    <div class="cifra"><b>12</b><span>categorías de vacantes</span></div>
+    <div class="cifra"><b>121</b><span>pruebas automatizadas en verde</span></div>
+  </div>
+
+  <h3>Quién usa el sistema</h3>
+  <div class="grid3">
+    <div class="tarjeta">
+      <span class="etiqueta">Público</span>
+      <h4>Visitante</h4>
+      <ul>
+        <li>Busca y filtra vacantes</li>
+        <li>Ve perfiles de empresas</li>
+        <li>Consulta estadísticas, FAQ y contacto</li>
+      </ul>
+    </div>
+    <div class="tarjeta">
+      <span class="etiqueta">Portal Blade</span>
+      <h4>Alumno</h4>
+      <ul>
+        <li>Arma su CV estructurado</li>
+        <li>Sube documentos probatorios</li>
+        <li>Se postula y sigue su estatus</li>
+      </ul>
+    </div>
+    <div class="tarjeta">
+      <span class="etiqueta">Portal Blade</span>
+      <h4>Reclutador</h4>
+      <ul>
+        <li>Gestiona su empresa</li>
+        <li>Publica y da de baja vacantes</li>
+        <li>Revisa candidatos y cambia estatus</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tarjeta" style="margin-top:3.5mm">
+    <span class="etiqueta">Panel Filament · /admin</span>
+    <h4>Administrador (la universidad)</h4>
+    <p>Administra empresas, usuarios, categorías, vacantes, postulaciones y mensajes de contacto; ve un dashboard con métricas y genera reportes PDF con filtros.</p>
+  </div>
+
+  <h3>Stack tecnológico</h3>
+  <table>
+    <tr><th style="width:26%">Capa</th><th style="width:30%">Tecnología</th><th>Para qué se usa</th></tr>
+    <tr><td>Backend</td><td>PHP 8.4 · Laravel 13</td><td>Rutas, controladores, validación, autorización, Eloquent ORM</td></tr>
+    <tr><td>Panel admin</td><td>Filament 5</td><td>CRUD, tablas con filtros, widgets y acciones del administrador</td></tr>
+    <tr><td>Frontend</td><td>Blade · Tailwind CSS 4 · Alpine.js</td><td>Sitio público y portales de alumno y reclutador</td></tr>
+    <tr><td>Gráficas</td><td>Chart.js</td><td>Página pública de estadísticas</td></tr>
+    <tr><td>Build</td><td>Vite 8 · Node</td><td>Compila y versiona CSS/JS</td></tr>
+    <tr><td>PDF</td><td>dompdf (barryvdh/laravel-dompdf)</td><td>Reportes y CV generados en el servidor</td></tr>
+    <tr><td>Base de datos</td><td>MySQL 8 (InnoDB, utf8mb4)</td><td>Persistencia; índices UNIQUE y FULLTEXT</td></tr>
+    <tr><td>Infraestructura</td><td>Docker · Coolify · VPS Hostinger</td><td>Contenedor PHP-FPM + Nginx con HTTPS automático</td></tr>
+  </table>
+</section>
+
+<!-- ============ 2. ARQUITECTURA ============ -->
+<section class="seccion compacta">
+  <h2><span class="num">2</span>Arquitectura de la aplicación</h2>
+  <p class="lead">Una sola aplicación Laravel (monolito por capas) con dos interfaces: Blade para el público, alumnos y reclutadores, y Filament para el administrador. Ambas comparten los mismos modelos, reglas y servicios.</p>
+
+  <figure>
+    <svg viewBox="0 0 720 430" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5b6474"/></marker>
+      </defs>
+      <!-- actores -->
+      <g font-size="12" font-weight="600" fill="#1d2433" text-anchor="middle">
+        <rect x="20" y="10" width="150" height="34" rx="17" fill="#fff" stroke="#adc8ea"/><text x="95" y="32">Visitante</text>
+        <rect x="200" y="10" width="150" height="34" rx="17" fill="#fff" stroke="#adc8ea"/><text x="275" y="32">Alumno</text>
+        <rect x="380" y="10" width="150" height="34" rx="17" fill="#fff" stroke="#adc8ea"/><text x="455" y="32">Reclutador</text>
+        <rect x="560" y="10" width="140" height="34" rx="17" fill="#fff" stroke="#adc8ea"/><text x="630" y="32">Administrador</text>
+      </g>
+      <g stroke="#5b6474" stroke-width="1.4" marker-end="url(#fl)">
+        <line x1="95" y1="44" x2="95" y2="76"/><line x1="275" y1="44" x2="275" y2="76"/>
+        <line x1="455" y1="44" x2="455" y2="76"/><line x1="630" y1="44" x2="630" y2="76"/>
+      </g>
+      <!-- capa de presentación -->
+      <rect x="10" y="62" width="700" height="356" rx="12" fill="#f6f8fb" stroke="#d9dee7"/>
+      <text x="22" y="410" font-size="10.5" fill="#5b6474">Laravel 13 · una sola aplicación</text>
+
+      <rect x="20" y="78" width="510" height="62" rx="8" fill="#eef4fb" stroke="#2b5fa8"/>
+      <text x="275" y="99" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0b3c7a">Interfaz Blade + Tailwind + Alpine.js</text>
+      <g font-size="10.5" fill="#1d2433" text-anchor="middle">
+        <text x="95" y="122">Sitio público</text><text x="275" y="122">/alumno/*</text><text x="455" y="122">/reclutador/*</text>
+      </g>
+      <rect x="545" y="78" width="155" height="62" rx="8" fill="#fdf4e1" stroke="#c98a0c"/>
+      <text x="622" y="99" text-anchor="middle" font-size="12.5" font-weight="700" fill="#7a5200">Panel Filament</text>
+      <text x="622" y="122" text-anchor="middle" font-size="10.5">/admin</text>
+
+      <!-- capa HTTP -->
+      <rect x="20" y="152" width="680" height="70" rx="8" fill="#fff" stroke="#adc8ea"/>
+      <text x="32" y="170" font-size="10" font-weight="700" fill="#2b5fa8" letter-spacing=".05em">CAPA HTTP</text>
+      <g font-size="10.5" text-anchor="middle" fill="#1d2433">
+        <rect x="32" y="178" width="150" height="34" rx="6" fill="#eef4fb"/><text x="107" y="199">Rutas + middleware role:</text>
+        <rect x="196" y="178" width="150" height="34" rx="6" fill="#eef4fb"/><text x="271" y="199">Form Requests (validación)</text>
+        <rect x="360" y="178" width="150" height="34" rx="6" fill="#eef4fb"/><text x="435" y="199">Policies (autorización)</text>
+        <rect x="524" y="178" width="164" height="34" rx="6" fill="#eef4fb"/><text x="606" y="199">Controladores delgados</text>
+      </g>
+
+      <!-- capa de dominio -->
+      <rect x="20" y="234" width="680" height="70" rx="8" fill="#fff" stroke="#adc8ea"/>
+      <text x="32" y="252" font-size="10" font-weight="700" fill="#2b5fa8" letter-spacing=".05em">LÓGICA DE NEGOCIO</text>
+      <g font-size="10.5" text-anchor="middle" fill="#1d2433">
+        <rect x="32" y="260" width="200" height="34" rx="6" fill="#e6f4ec"/><text x="132" y="281">PostulacionService</text>
+        <rect x="246" y="260" width="200" height="34" rx="6" fill="#e6f4ec"/><text x="346" y="281">ReporteService (dompdf)</text>
+        <rect x="460" y="260" width="228" height="34" rx="6" fill="#e6f4ec"/><text x="574" y="281">EstadisticaService</text>
+      </g>
+
+      <!-- capa de datos -->
+      <rect x="20" y="316" width="680" height="62" rx="8" fill="#fff" stroke="#adc8ea"/>
+      <text x="32" y="334" font-size="10" font-weight="700" fill="#2b5fa8" letter-spacing=".05em">DATOS</text>
+      <g font-size="10.5" text-anchor="middle" fill="#1d2433">
+        <rect x="32" y="340" width="250" height="30" rx="6" fill="#eef4fb"/><text x="157" y="359">Modelos Eloquent · Enums · scopes</text>
+        <rect x="300" y="340" width="190" height="30" rx="6" fill="#0b3c7a"/><text x="395" y="359" fill="#fff" font-weight="600">MySQL 8 (InnoDB)</text>
+        <rect x="508" y="340" width="180" height="30" rx="6" fill="#eef4fb"/><text x="598" y="359">Storage: público / privado</text>
+      </g>
+    </svg>
+    <figcaption>Figura 1. Capas de la aplicación. Blade y Filament son dos “pieles” sobre la misma lógica.</figcaption>
+  </figure>
+
+  <h3>Decisiones de diseño y por qué</h3>
+  <table>
+    <tr><th style="width:30%">Decisión</th><th>Justificación</th></tr>
+    <tr><td>Filament solo para el admin</td><td>El admin necesita CRUD masivo, filtros y exportación: Filament lo resuelve sin reinventar. Alumno y reclutador usan Blade para demostrar el trabajo de frontend que evalúa la materia.</td></tr>
+    <tr><td>Controladores delgados</td><td>La validación vive en Form Requests, los permisos en Policies y las reglas en Services. El controlador solo coordina; así la lógica se prueba y se reutiliza desde Filament.</td></tr>
+    <tr><td>Una tabla <code>users</code> + perfiles 1:1</td><td><code>users.role</code> decide el área; los datos propios de cada rol viven en <code>alumnos</code> y <code>reclutadores</code>, cada uno con sus relaciones.</td></tr>
+    <tr><td>Enums de PHP</td><td>Rol, estatus, modalidad y tipo de contrato están tipados; las mismas etiquetas y colores se usan en Blade y en Filament.</td></tr>
+    <tr><td>Soft deletes en empresas y vacantes</td><td>Dar de baja no destruye el historial de postulaciones ni los reportes.</td></tr>
+  </table>
+</section>
+
+<!-- ============ 3. CICLO DE PETICIÓN ============ -->
+<section class="seccion">
+  <h2><span class="num">3</span>Ciclo de una petición</h2>
+  <p class="lead">Ejemplo: un reclutador guarda una vacante nueva. Cada paso tiene una sola responsabilidad y puede detener la petición.</p>
+
+  <figure>
+    <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="f2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2b5fa8"/></marker></defs>
+      <g font-size="10.5" text-anchor="middle">
+        <!-- fila 1 -->
+        <rect x="10" y="20" width="120" height="58" rx="8" fill="#0b3c7a"/>
+        <text x="70" y="44" fill="#fff" font-weight="700">Navegador</text><text x="70" y="62" fill="#d6e4f5" font-size="9.5">POST /reclutador/vacantes</text>
+        <rect x="160" y="20" width="120" height="58" rx="8" fill="#eef4fb" stroke="#2b5fa8"/>
+        <text x="220" y="44" font-weight="700" fill="#0b3c7a">Middleware</text><text x="220" y="62" font-size="9.5">auth · role:reclutador · CSRF</text>
+        <rect x="310" y="20" width="120" height="58" rx="8" fill="#eef4fb" stroke="#2b5fa8"/>
+        <text x="370" y="44" font-weight="700" fill="#0b3c7a">Form Request</text><text x="370" y="62" font-size="9.5">StoreVacanteRequest</text>
+        <rect x="460" y="20" width="120" height="58" rx="8" fill="#eef4fb" stroke="#2b5fa8"/>
+        <text x="520" y="44" font-weight="700" fill="#0b3c7a">Policy</text><text x="520" y="62" font-size="9.5">VacantePolicy::create</text>
+        <rect x="600" y="20" width="110" height="58" rx="8" fill="#eef4fb" stroke="#2b5fa8"/>
+        <text x="655" y="44" font-weight="700" fill="#0b3c7a">Controlador</text><text x="655" y="62" font-size="9.5">VacanteController</text>
+        <!-- fila 2 -->
+        <rect x="600" y="140" width="110" height="58" rx="8" fill="#e6f4ec" stroke="#1f7a4d"/>
+        <text x="655" y="164" font-weight="700" fill="#1f7a4d">Modelo</text><text x="655" y="182" font-size="9.5">Vacante::create()</text>
+        <rect x="430" y="140" width="140" height="58" rx="8" fill="#0b3c7a"/>
+        <text x="500" y="164" fill="#fff" font-weight="700">MySQL</text><text x="500" y="182" fill="#d6e4f5" font-size="9.5">INSERT con bindings</text>
+        <rect x="250" y="140" width="150" height="58" rx="8" fill="#e6f4ec" stroke="#1f7a4d"/>
+        <text x="325" y="164" font-weight="700" fill="#1f7a4d">Redirección</text><text x="325" y="182" font-size="9.5">con mensaje flash “éxito”</text>
+        <rect x="60" y="140" width="160" height="58" rx="8" fill="#eef4fb" stroke="#2b5fa8"/>
+        <text x="140" y="164" font-weight="700" fill="#0b3c7a">Vista Blade</text><text x="140" y="182" font-size="9.5">listado de vacantes</text>
+      </g>
+      <g stroke="#2b5fa8" stroke-width="1.6" fill="none" marker-end="url(#f2)">
+        <line x1="130" y1="49" x2="157" y2="49"/><line x1="280" y1="49" x2="307" y2="49"/>
+        <line x1="430" y1="49" x2="457" y2="49"/><line x1="580" y1="49" x2="597" y2="49"/>
+        <line x1="655" y1="78" x2="655" y2="137"/>
+        <line x1="600" y1="169" x2="573" y2="169"/><line x1="430" y1="169" x2="403" y2="169"/><line x1="250" y1="169" x2="223" y2="169"/>
+      </g>
+      <!-- rechazos -->
+      <g font-size="9.5" text-anchor="middle">
+        <line x1="220" y1="78" x2="220" y2="100" stroke="#b3261e" stroke-dasharray="3 3"/>
+        <text x="220" y="112" fill="#b3261e">403 / login · 419</text>
+        <line x1="370" y1="78" x2="370" y2="100" stroke="#b3261e" stroke-dasharray="3 3"/>
+        <text x="370" y="112" fill="#b3261e">vuelve con errores</text>
+        <line x1="520" y1="78" x2="520" y2="100" stroke="#b3261e" stroke-dasharray="3 3"/>
+        <text x="520" y="112" fill="#b3261e">403 prohibido</text>
+      </g>
+      <rect x="10" y="226" width="700" height="62" rx="8" fill="#f6f8fb" stroke="#d9dee7"/>
+      <text x="24" y="248" font-size="10.5" font-weight="700" fill="#0b3c7a">Detalle importante</text>
+      <text x="24" y="267" font-size="10" fill="#1d2433">El controlador nunca toma empresa_id ni reclutador_id del formulario: los saca del usuario autenticado.</text>
+      <text x="24" y="282" font-size="10" fill="#1d2433">Así un reclutador no puede “inyectar” una vacante a nombre de otra empresa aunque modifique el HTML.</text>
+    </svg>
+    <figcaption>Figura 2. Recorrido de una petición; las líneas rojas son los puntos donde se rechaza.</figcaption>
+  </figure>
+
+  <h3>Autorización en tres niveles</h3>
+  <div class="grid3">
+    <div class="tarjeta"><span class="etiqueta">Nivel 1 · rutas</span><h4>Middleware <code>role:</code></h4><p><code>EnsureRole</code> protege los grupos <code>/alumno/*</code> y <code>/reclutador/*</code>. Un alumno no puede ni abrir una URL del reclutador.</p></div>
+    <div class="tarjeta"><span class="etiqueta">Nivel 2 · registros</span><h4>Policies</h4><p><code>VacantePolicy</code>, <code>PostulacionPolicy</code>, <code>EmpresaPolicy</code>, <code>CvDocumentoPolicy</code>: un reclutador solo toca lo de <em>su</em> empresa.</p></div>
+    <div class="tarjeta"><span class="etiqueta">Nivel 3 · panel</span><h4><code>canAccessPanel()</code></h4><p>Solo el rol <code>admin</code> entra a Filament. El admin pasa todas las Policies con <code>before()</code>.</p></div>
+  </div>
+
+  <div class="decir">“Cada capa hace una sola cosa: el middleware decide <em>quién</em> puede entrar, el Form Request revisa que los datos sean válidos, la Policy decide si puede tocar <em>ese</em> registro y el controlador solo coordina.”</div>
+</section>
+
+<!-- ============ 4. BD - ER ============ -->
+<section class="seccion">
+  <h2><span class="num">4</span>Base de datos: modelo entidad-relación</h2>
+  <p class="lead">MySQL 8 con motor InnoDB y <code>utf8mb4_unicode_ci</code>. Todas las relaciones tienen llave foránea con su regla de borrado.</p>
+
+  <figure>
+    <svg viewBox="0 0 720 470" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="m" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7"><circle cx="5" cy="5" r="3.5" fill="#2b5fa8"/></marker></defs>
+      <style>
+        .ent rect.h { fill: #0b3c7a; } .ent rect.b { fill: #fff; stroke: #2b5fa8; }
+        .ent text.t { fill: #fff; font-weight: 700; font-size: 11.5px; }
+        .ent text.c { font-size: 9.6px; fill: #1d2433; }
+        .ent text.k { font-size: 9.6px; fill: #c98a0c; font-weight: 700; }
+        .rel { stroke: #2b5fa8; stroke-width: 1.5; fill: none; }
+        .card { font-size: 10px; font-weight: 700; fill: #c98a0c; }
+        .rl { font-size: 9.5px; fill: #5b6474; font-style: italic; }
+      </style>
+
+      <!-- USERS -->
+      <g class="ent" transform="translate(280,10)">
+        <rect class="h" width="160" height="22" rx="4"/><text class="t" x="80" y="15" text-anchor="middle">users</text>
+        <rect class="b" y="22" width="160" height="64"/>
+        <text class="k" x="8" y="37">PK</text><text class="c" x="30" y="37">id</text>
+        <text class="k" x="8" y="51">UK</text><text class="c" x="30" y="51">email</text>
+        <text class="c" x="30" y="65">role: admin|reclutador|alumno</text>
+        <text class="c" x="30" y="79">activo, password (bcrypt)</text>
+      </g>
+      <!-- ALUMNOS -->
+      <g class="ent" transform="translate(20,140)">
+        <rect class="h" width="160" height="22" rx="4"/><text class="t" x="80" y="15" text-anchor="middle">alumnos</text>
+        <rect class="b" y="22" width="160" height="64"/>
+        <text class="k" x="8" y="37">FK</text><text class="c" x="30" y="37">user_id (UK)</text>
+        <text class="k" x="8" y="51">UK</text><text class="c" x="30" y="51">matricula</text>
+        <text class="c" x="30" y="65">carrera, cuatrimestre</text>
+        <text class="c" x="30" y="79">resumen, foto_path</text>
+      </g>
+      <!-- RECLUTADORES -->
+      <g class="ent" transform="translate(540,140)">
+        <rect class="h" width="160" height="22" rx="4"/><text class="t" x="80" y="15" text-anchor="middle">reclutadores</text>
+        <rect class="b" y="22" width="160" height="50"/>
+        <text class="k" x="8" y="37">FK</text><text class="c" x="30" y="37">user_id (UK)</text>
+        <text class="k" x="8" y="51">FK</text><text class="c" x="30" y="51">empresa_id</text>
+        <text class="c" x="30" y="65">puesto, telefono</text>
+      </g>
+      <!-- EMPRESAS -->
+      <g class="ent" transform="translate(540,262)">
+        <rect class="h" width="160" height="22" rx="4"/><text class="t" x="80" y="15" text-anchor="middle">empresas</text>
+        <rect class="b" y="22" width="160" height="64"/>
+        <text class="k" x="8" y="37">UK</text><text class="c" x="30" y="37">rfc</text>
+        <text class="c" x="30" y="51">nombre, sector, logo_path</text>
+        <text class="c" x="30" y="65">verificada, activa</text>
+        <text class="c" x="30" y="79">deleted_at (soft delete)</text>
+      </g>
+      <!-- VACANTES -->
+      <g class="ent" transform="translate(280,262)">
+        <rect class="h" width="160" height="22" rx="4"/><text class="t" x="80" y="15" text-anchor="middle">vacantes</text>
+        <rect class="b" y="22" width="160" height="92"/>
+        <text class="k" x="8" y="37">FK</text><text class="c" x="30" y="37">empresa_id</text>
+        <text class="k" x="8" y="51">FK</text><text class="c" x="30" y="51">reclutador_id</text>
+        <text class="k" x="8" y="65">FK</text><text class="c" x="30" y="65">categoria_id</text>
+        <text class="c" x="30" y="79">titulo, slug (UK), modalidad</text>
+        <text class="c" x="30" y="93">fecha_inicio, fecha_fin, activa</text>
+        <text class="c" x="30" y="107">FULLTEXT(titulo, descripcion)</text>
+      </g>
+      <!-- CATEGORIAS -->
+      <g class="ent" transform="translate(280,410)">
+        <rect class="h" width="160" height="22" rx="4"/><text class="t" x="80" y="15" text-anchor="middle">categorias (12)</text>
+        <rect class="b" y="22" width="160" height="30"/>
+        <text class="c" x="30" y="41">nombre (UK), slug (UK)</text>
+      </g>
+      <!-- POSTULACIONES -->
+      <g class="ent" transform="translate(20,262)">
+        <rect class="h" width="180" height="22" rx="4"/><text class="t" x="90" y="15" text-anchor="middle">postulaciones</text>
+        <rect class="b" y="22" width="180" height="64"/>
+        <text class="k" x="8" y="37">FK</text><text class="c" x="30" y="37">vacante_id</text>
+        <text class="k" x="8" y="51">FK</text><text class="c" x="30" y="51">alumno_id</text>
+        <text class="c" x="30" y="65">estatus: en_proceso|aceptado|…</text>
+        <text class="k" x="8" y="79">UK</text><text class="c" x="30" y="79" font-weight="700">(vacante_id, alumno_id)</text>
+      </g>
+      <!-- CV -->
+      <g class="ent" transform="translate(20,396)">
+        <rect class="h" width="230" height="22" rx="4" style="fill:#2b5fa8"/><text class="t" x="115" y="15" text-anchor="middle">CV del alumno (4 tablas)</text>
+        <rect class="b" y="22" width="230" height="44"/>
+        <text class="c" x="10" y="38">cv_experiencias · cv_formaciones</text>
+        <text class="c" x="10" y="54">cv_habilidades · cv_documentos (privado)</text>
+      </g>
+
+      <!-- relaciones -->
+      <path class="rel" d="M300,96 L300,118 L100,118 L100,140"/><text class="card" x="306" y="112">1</text><text class="card" x="106" y="135">0..1</text>
+      <path class="rel" d="M420,96 L420,118 L620,118 L620,140"/><text class="card" x="408" y="112">1</text><text class="card" x="626" y="135">0..1</text>
+      <path class="rel" d="M620,212 L620,262"/><text class="card" x="626" y="226">N</text><text class="card" x="626" y="257">1</text>
+      <text class="rl" x="572" y="244">emplea</text>
+      <path class="rel" d="M540,312 L440,312"/><text class="card" x="528" y="306">1</text><text class="card" x="446" y="306">N</text>
+      <text class="rl" x="472" y="326">publica</text>
+      <path class="rel" d="M360,376 L360,410"/><text class="card" x="366" y="390">N</text><text class="card" x="366" y="405">1</text>
+      <path class="rel" d="M280,312 L200,312"/><text class="card" x="268" y="306">1</text><text class="card" x="206" y="306">N</text>
+      <text class="rl" x="222" y="326">recibe</text>
+      <path class="rel" d="M90,226 L90,262"/><text class="card" x="96" y="240">1</text><text class="card" x="96" y="257">N</text>
+      <text class="rl" x="104" y="249">realiza</text>
+      <path class="rel" d="M30,226 L30,236 L8,236 L8,440 L20,440"/><text class="card" x="12" y="250">1</text><text class="card" x="10" y="434">N</text>
+    </svg>
+    <figcaption>Figura 3. Modelo entidad-relación simplificado (sin tablas de infraestructura de Laravel).</figcaption>
+  </figure>
+
+  <h3>Cardinalidades que pide el enunciado</h3>
+  <ul>
+    <li>Una <b>empresa</b> tiene <b>muchas vacantes</b>; cada vacante pertenece a una sola empresa.</li>
+    <li>Una <b>empresa</b> tiene <b>uno o más reclutadores</b>; cada reclutador pertenece a una empresa.</li>
+    <li>Un <b>alumno</b> tiene <b>muchas postulaciones</b>, pero <b>solo una por vacante</b> (índice UNIQUE compuesto).</li>
+    <li><b>users → alumnos / reclutadores</b> es 1 a 0..1: el perfil depende del rol.</li>
+  </ul>
+</section>
+
+<!-- ============ 5. TABLAS E ÍNDICES ============ -->
+<section class="seccion">
+  <h2><span class="num">5</span>Tablas, llaves e índices clave</h2>
+
+  <table>
+    <tr><th style="width:19%">Tabla</th><th style="width:29%">Contenido</th><th>Llaves e índices relevantes</th></tr>
+    <tr><td>users</td><td>Cuentas de los tres roles</td><td><code>email</code> UK · <code>role</code> IX · <code>activo</code> para desactivar sin borrar</td></tr>
+    <tr><td>alumnos</td><td>Perfil 1:1 del alumno</td><td><code>user_id</code> UK, CASCADE · <code>matricula</code> UK</td></tr>
+    <tr><td>reclutadores</td><td>Perfil 1:1 del reclutador</td><td><code>user_id</code> UK, CASCADE · <code>empresa_id</code> SET NULL</td></tr>
+    <tr><td>empresas</td><td>Datos, logo, verificación</td><td><code>rfc</code> UK · soft delete</td></tr>
+    <tr><td>categorias</td><td>12 áreas fijas (seeder idempotente)</td><td><code>nombre</code> y <code>slug</code> UK</td></tr>
+    <tr><td>vacantes</td><td>Ofertas con vigencia por fechas</td><td>IX <code>(activa, fecha_inicio, fecha_fin)</code> · FULLTEXT <code>(titulo, descripcion)</code> · <code>categoria_id</code> RESTRICT · soft delete</td></tr>
+    <tr><td>postulaciones</td><td>Alumno ↔ vacante con estatus</td><td><b>UK <code>(vacante_id, alumno_id)</code></b> · <code>estatus</code> IX</td></tr>
+    <tr><td>cv_experiencias</td><td>Empleos, prácticas, estadías</td><td><code>alumno_id</code> CASCADE</td></tr>
+    <tr><td>cv_formaciones</td><td>Formación y certificaciones</td><td><code>alumno_id</code> CASCADE</td></tr>
+    <tr><td>cv_habilidades</td><td>Habilidades por área y nivel</td><td>UK <code>(alumno_id, nombre)</code> · <code>categoria_id</code> SET NULL</td></tr>
+    <tr><td>cv_documentos</td><td>Archivos probatorios</td><td>Archivo en disco <b>privado</b>; MIME y tamaño guardados</td></tr>
+    <tr><td>mensajes_contacto</td><td>Formulario público</td><td><code>leido</code> para la bandeja del admin</td></tr>
+    <tr><td>sessions, cache, jobs</td><td>Infraestructura de Laravel</td><td>Sesión y caché en BD: no hace falta Redis</td></tr>
+  </table>
+
+  <h3>Reglas de borrado (por qué cada una)</h3>
+  <div class="grid3">
+    <div class="tarjeta"><span class="etiqueta">CASCADE</span><h4>Datos dependientes</h4><p>Si se borra un usuario, su perfil y su CV ya no tienen sentido: se van con él.</p></div>
+    <div class="tarjeta"><span class="etiqueta">SET NULL</span><h4>Vínculos opcionales</h4><p>Si un reclutador se va, sus vacantes se quedan en la empresa sin autor.</p></div>
+    <div class="tarjeta"><span class="etiqueta">RESTRICT</span><h4>Catálogos</h4><p>No se puede borrar una categoría que todavía clasifica vacantes.</p></div>
+  </div>
+
+  <h3>Vigencia de una vacante</h3>
+  <p>No es una columna: se calcula. Una vacante está vigente si se cumplen las tres condiciones:</p>
+  <p style="text-align:center;font-family:Consolas,monospace;font-size:10.5pt;background:#eef4fb;padding:2.5mm;border-radius:2mm">activa = true &nbsp;AND&nbsp; fecha_inicio ≤ HOY &nbsp;AND&nbsp; fecha_fin ≥ HOY</p>
+  <p>Vive en un solo lugar, el scope <code>Vacante::vigentes()</code>, y el accessor <code>estado_vigencia</code> devuelve <i>programada</i>, <i>vigente</i>, <i>por vencer</i> (≤ 7 días), <i>vencida</i> o <i>inactiva</i>. El índice compuesto hace rápida esta consulta. La búsqueda combina <code>LIKE</code> en el título con el índice <code>FULLTEXT</code>.</p>
+
+  
+</section>
+
+<!-- ============ 6. FLUJOS ============ -->
+<section class="seccion compacta">
+  <h2><span class="num">6</span>Flujos principales</h2>
+  <p class="lead">El ciclo completo de una vacante involucra a los tres roles. Este es el recorrido que conviene mostrar en la demostración.</p>
+
+  <figure>
+    <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="f3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5b6474"/></marker></defs>
+      <!-- carriles -->
+      <g font-size="11" font-weight="700">
+        <rect x="0" y="0" width="720" height="92" fill="#fdf4e1"/><text x="10" y="18" fill="#7a5200">RECLUTADOR</text>
+        <rect x="0" y="96" width="720" height="92" fill="#eef4fb"/><text x="10" y="114" fill="#0b3c7a">ALUMNO</text>
+        <rect x="0" y="192" width="720" height="92" fill="#e6f4ec"/><text x="10" y="210" fill="#1f7a4d">SISTEMA / ADMIN</text>
+      </g>
+      <g font-size="10" text-anchor="middle" fill="#1d2433">
+        <rect x="20" y="30" width="118" height="48" rx="7" fill="#fff" stroke="#c98a0c"/><text x="79" y="50">Se registra</text><text x="79" y="64" font-size="9.8">crea su empresa</text>
+        <rect x="160" y="30" width="118" height="48" rx="7" fill="#fff" stroke="#c98a0c"/><text x="219" y="50">Publica vacante</text><text x="219" y="64" font-size="9.8">fechas + categoría</text>
+
+        <rect x="300" y="126" width="118" height="48" rx="7" fill="#fff" stroke="#2b5fa8"/><text x="359" y="146">Busca y filtra</text><text x="359" y="160" font-size="9.8">solo vigentes</text>
+        <rect x="440" y="126" width="118" height="48" rx="7" fill="#fff" stroke="#2b5fa8"/><text x="499" y="146">Se postula</text><text x="499" y="160" font-size="9.8">una sola vez</text>
+        <rect x="20" y="126" width="118" height="48" rx="7" fill="#fff" stroke="#2b5fa8"/><text x="79" y="146">Se registra</text><text x="79" y="160" font-size="9.8">matrícula + carrera</text>
+        <rect x="160" y="126" width="118" height="48" rx="7" fill="#fff" stroke="#2b5fa8"/><text x="219" y="146">Arma su CV</text><text x="219" y="160" font-size="9.8">+ documentos</text>
+
+        <rect x="440" y="30" width="118" height="48" rx="7" fill="#fff" stroke="#c98a0c"/><text x="499" y="50">Revisa candidato</text><text x="499" y="64" font-size="9.8">CV + PDF</text>
+        <rect x="580" y="30" width="125" height="48" rx="7" fill="#fff" stroke="#c98a0c"/><text x="642" y="50">Cambia estatus</text><text x="642" y="64" font-size="9.8">aceptado / rechazado</text>
+        <rect x="580" y="126" width="125" height="48" rx="7" fill="#fff" stroke="#2b5fa8"/><text x="642" y="146">Ve su estatus</text><text x="642" y="160" font-size="9.8">+ comentario</text>
+
+        <rect x="300" y="222" width="118" height="48" rx="7" fill="#fff" stroke="#1f7a4d"/><text x="359" y="242">Calcula vigencia</text><text x="359" y="256" font-size="9.8">scope vigentes()</text>
+        <rect x="440" y="222" width="118" height="48" rx="7" fill="#fff" stroke="#1f7a4d"/><text x="499" y="242">Valida duplicado</text><text x="499" y="256" font-size="9.8">4 capas + UNIQUE</text>
+        <rect x="580" y="222" width="125" height="48" rx="7" fill="#fff" stroke="#1f7a4d"/><text x="642" y="242">Admin supervisa</text><text x="642" y="256" font-size="9.8">dashboard + reportes</text>
+      </g>
+      <g stroke="#5b6474" stroke-width="1.4" fill="none" marker-end="url(#f3)">
+        <line x1="138" y1="54" x2="157" y2="54"/>
+        <line x1="138" y1="150" x2="157" y2="150"/>
+        <path d="M278,54 L289,54 L289,150 L297,150"/>
+        <line x1="418" y1="150" x2="437" y2="150"/>
+        <line x1="499" y1="126" x2="499" y2="81"/>
+        <line x1="558" y1="54" x2="577" y2="54"/>
+        <line x1="642" y1="78" x2="642" y2="123"/>
+        <line x1="359" y1="174" x2="359" y2="219" stroke-dasharray="3 3"/>
+        <line x1="499" y1="174" x2="499" y2="219" stroke-dasharray="3 3"/>
+        <line x1="642" y1="174" x2="642" y2="219" stroke-dasharray="3 3"/>
+      </g>
+    </svg>
+    <figcaption>Figura 4. Ciclo de vida de una vacante por rol. Las líneas punteadas son validaciones del sistema.</figcaption>
+  </figure>
+
+  <div class="grid2">
+    <div class="tarjeta">
+      <span class="etiqueta">Flujo A</span><h4>Registro e inicio de sesión</h4>
+      <ol>
+        <li>El usuario elige <code>/registro/alumno</code> o <code>/registro/reclutador</code>.</li>
+        <li>El reclutador crea en una <b>transacción</b>: empresa + usuario + perfil. Si algo falla, no queda nada a medias.</li>
+        <li>El rol lo fija el servidor, nunca el formulario.</li>
+        <li>Login con <code>RateLimiter</code>; la sesión se regenera y se redirige al panel según el rol.</li>
+      </ol>
+    </div>
+    <div class="tarjeta">
+      <span class="etiqueta">Flujo B</span><h4>Publicar y dar de baja una vacante</h4>
+      <ol>
+        <li>Solo un reclutador con empresa activa puede crear (<code>VacantePolicy::create</code>).</li>
+        <li><code>StoreVacanteRequest</code> valida <code>fecha_fin ≥ fecha_inicio</code> y <code>salario_max ≥ salario_min</code>.</li>
+        <li>La baja es <i>soft delete</i>: se conservan las postulaciones.</li>
+        <li>Solo puede editar vacantes de su propia empresa.</li>
+      </ol>
+    </div>
+    <div class="tarjeta">
+      <span class="etiqueta">Flujo C</span><h4>CV y documentos del alumno</h4>
+      <ol>
+        <li>Experiencia, formación y habilidades se agregan y editan por secciones.</li>
+        <li>Documentos: PDF, JPG o PNG ≤ 5 MB; se valida el MIME real.</li>
+        <li>Se guardan en disco <b>privado</b>; se descargan solo por un controlador con Policy.</li>
+        <li>El CV se exporta a PDF desde <code>/alumno/cv/pdf</code>.</li>
+      </ol>
+    </div>
+    <div class="tarjeta">
+      <span class="etiqueta">Flujo D</span><h4>Revisión de candidatos</h4>
+      <ol>
+        <li>El reclutador ve los postulados a <i>sus</i> vacantes.</li>
+        <li>Abre el CV y los documentos del candidato (permitido porque se postuló a su empresa).</li>
+        <li>Cambia el estatus a <b>aceptado</b> o <b>rechazado</b> con comentario.</li>
+        <li>El alumno lo ve en <code>/alumno/postulaciones</code>.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6b. POSTULACIÓN ÚNICA ============ -->
+<section class="seccion">
+  <h2><span class="num">7</span>Reglas de negocio y seguridad</h2>
+
+  <h3 style="margin-top:0">La regla estrella: postulación única en cuatro capas</h3>
+  <figure>
+    <svg viewBox="0 0 720 250" xmlns="http://www.w3.org/2000/svg">
+      <g font-size="10.5">
+        <rect x="10" y="10" width="700" height="50" rx="8" fill="#eef4fb" stroke="#adc8ea"/>
+        <text x="26" y="31" font-weight="700" fill="#0b3c7a">1 · Interfaz</text>
+        <text x="26" y="49" fill="#1d2433">Si ya se postuló, el botón dice “Ya te postulaste” y está deshabilitado.</text>
+        <text x="700" y="40" text-anchor="end" font-size="9.5" fill="#5b6474">evita el error común</text>
+
+        <rect x="50" y="70" width="620" height="50" rx="8" fill="#eef4fb" stroke="#2b5fa8"/>
+        <text x="66" y="91" font-weight="700" fill="#0b3c7a">2 · StorePostulacionRequest</text>
+        <text x="66" y="109" fill="#1d2433">Rol alumno, vacante vigente y sin postulación previa (VacantePolicy::postular).</text>
+        <text x="660" y="100" text-anchor="end" font-size="9.5" fill="#5b6474">cubre peticiones manipuladas</text>
+
+        <rect x="90" y="130" width="540" height="50" rx="8" fill="#e6f4ec" stroke="#1f7a4d"/>
+        <text x="106" y="151" font-weight="700" fill="#1f7a4d">3 · PostulacionService (transacción)</text>
+        <text x="106" y="169" fill="#1d2433">Inserta en una transacción y atrapa UniqueConstraintViolationException.</text>
+        <text x="620" y="160" text-anchor="end" font-size="9.5" fill="#5b6474">doble clic</text>
+
+        <rect x="130" y="190" width="460" height="50" rx="8" fill="#0b3c7a"/>
+        <text x="146" y="211" font-weight="700" fill="#fff">4 · Índice UNIQUE (vacante_id, alumno_id)</text>
+        <text x="146" y="229" fill="#d6e4f5">MySQL rechaza el duplicado aunque todo lo demás falle.</text>
+      </g>
+    </svg>
+    <figcaption>Figura 5. Defensa en profundidad: cada capa es más estricta que la anterior.</figcaption>
+  </figure>
+
+  <div class="decir">“La interfaz es comodidad, no seguridad. Aunque alguien mande el POST a mano o haga doble clic, la última palabra la tiene el índice UNIQUE de la base de datos.”</div>
+
+  <h3>Amenazas y mitigaciones</h3>
+  <table>
+    <tr><th style="width:24%">Amenaza</th><th>Mitigación en el proyecto</th></tr>
+    <tr><td>CSRF</td><td><code>@csrf</code> en todos los formularios; Laravel rechaza con 419 los envíos sin token.</td></tr>
+    <tr><td>XSS</td><td>Salida siempre con <code>{{ }}</code> (escapado); textos con saltos de línea con <code>nl2br(e())</code>.</td></tr>
+    <tr><td>Inyección SQL</td><td>Eloquent y Query Builder con <i>bindings</i>, también en las búsquedas <code>LIKE</code>.</td></tr>
+    <tr><td>Asignación masiva</td><td><code>$fillable</code> explícito; <code>role</code>, <code>empresa_id</code> y <code>alumno_id</code> salen del usuario autenticado.</td></tr>
+    <tr><td>Acceso entre empresas</td><td>Policies + pruebas de aislamiento: un reclutador no ve candidatos ni reportes de otra empresa.</td></tr>
+    <tr><td>Archivos maliciosos</td><td>Validación de MIME real y tamaño; documentos del CV en disco privado, fuera de <code>public/</code>.</td></tr>
+    <tr><td>Fuerza bruta</td><td><code>RateLimiter</code> en el login y en el formulario de contacto.</td></tr>
+    <tr><td>Contraseñas</td><td>Hash bcrypt y <code>Password::defaults()</code>.</td></tr>
+    <tr><td>Exposición de errores</td><td>En producción <code>APP_DEBUG=false</code>, HTTPS obligatorio y cookies <code>secure</code> + <code>httponly</code>.</td></tr>
+  </table>
+</section>
+
+<!-- ============ 8. REPORTES ============ -->
+<section class="seccion">
+  <h2><span class="num">8</span>Reportes PDF y estadísticas</h2>
+  <div class="grid2">
+    <div>
+      <h3 style="margin-top:0">ReporteService (dompdf)</h3>
+      <p>Toda la generación de PDF vive en un servicio; las plantillas están en <code>resources/views/pdf/</code>.</p>
+      <table>
+        <tr><th>Reporte</th><th>Quién lo genera</th></tr>
+        <tr><td>Vacantes</td><td>Admin (con filtros) · Reclutador (su empresa)</td></tr>
+        <tr><td>Postulaciones</td><td>Admin · Reclutador</td></tr>
+        <tr><td>Empresas / ficha</td><td>Admin · Reclutador</td></tr>
+        <tr><td>CV del alumno</td><td>Alumno · Reclutador · Admin</td></tr>
+      </table>
+      <ul>
+        <li>El reclutador siempre recibe su empresa como parámetro: <b>no puede</b> ver datos de otra.</li>
+        <li>Fuente DejaVu Sans (acentos y ñ) y numeración “Página X de Y”.</li>
+        <li><code>isPhpEnabled</code> queda apagado: el HTML no puede ejecutar PHP.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="margin-top:0">EstadisticaService</h3>
+      <p>Un solo servicio alimenta tres lugares con las mismas consultas:</p>
+      <ul>
+        <li>Página pública <code>/estadisticas</code> con Chart.js.</li>
+        <li>Dashboard del admin (widgets de Filament).</li>
+        <li>Panel del reclutador, filtrado por su empresa.</li>
+      </ul>
+      <table>
+        <tr><th>Métrica</th><th>Consulta</th></tr>
+        <tr><td>Resumen</td><td>Totales de vacantes, empresas, alumnos y postulaciones</td></tr>
+        <tr><td>Por categoría</td><td><code>withCount</code> de vacantes (opcionalmente vigentes)</td></tr>
+        <tr><td>Por estatus</td><td>Agrupación de postulaciones</td></tr>
+        <tr><td>Por mes</td><td>Postulaciones de los últimos 6 meses</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="decir">“Si mañana cambia cómo se cuenta una métrica, se cambia en un solo método y se actualizan a la vez la página pública, el dashboard y el panel del reclutador.”</div>
+</section>
+
+<!-- ============ 9. DESPLIEGUE ============ -->
+<section class="seccion">
+  <h2><span class="num">9</span>Despliegue: Docker + Coolify</h2>
+  <p class="lead">La aplicación corre en un VPS de Hostinger dentro de un contenedor Docker administrado por Coolify, con HTTPS de Let's Encrypt.</p>
+
+  <figure>
+    <svg viewBox="0 0 720 250" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="f4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2b5fa8"/></marker></defs>
+      <g font-size="10.5" text-anchor="middle">
+        <rect x="10" y="20" width="110" height="56" rx="8" fill="#fff" stroke="#adc8ea"/><text x="65" y="44" font-weight="700" fill="#0b3c7a">GitHub</text><text x="65" y="62" font-size="9.5">rama del proyecto</text>
+        <rect x="10" y="150" width="110" height="56" rx="8" fill="#fff" stroke="#adc8ea"/><text x="65" y="174" font-weight="700" fill="#0b3c7a">Navegador</text><text x="65" y="192" font-size="9.5">upslpvincula.tech</text>
+
+        <rect x="150" y="8" width="560" height="232" rx="12" fill="#f6f8fb" stroke="#d9dee7"/>
+        <text x="166" y="28" text-anchor="start" font-size="10" font-weight="700" fill="#5b6474">VPS HOSTINGER · Ubuntu 24.04 · Coolify</text>
+
+        <rect x="170" y="40" width="150" height="56" rx="8" fill="#fdf4e1" stroke="#c98a0c"/><text x="245" y="64" font-weight="700" fill="#7a5200">Build (Dockerfile)</text><text x="245" y="82" font-size="9.5">Composer → Vite → imagen</text>
+        <rect x="170" y="150" width="150" height="56" rx="8" fill="#fdf4e1" stroke="#c98a0c"/><text x="245" y="174" font-weight="700" fill="#7a5200">Traefik (proxy)</text><text x="245" y="192" font-size="9.5">HTTPS · Let's Encrypt</text>
+
+        <rect x="350" y="110" width="200" height="120" rx="10" fill="#fff" stroke="#2b5fa8"/>
+        <text x="450" y="130" font-weight="700" fill="#0b3c7a">Contenedor de la app</text>
+        <rect x="364" y="140" width="172" height="24" rx="5" fill="#eef4fb"/><text x="450" y="156">Nginx + PHP-FPM 8.4 · :8080</text>
+        <rect x="364" y="170" width="172" height="24" rx="5" fill="#eef4fb"/><text x="450" y="186">Laravel + Filament</text>
+        <rect x="364" y="200" width="172" height="22" rx="5" fill="#e6f4ec"/><text x="450" y="215" font-size="9.5">al iniciar: migrate · optimize</text>
+
+        <rect x="580" y="110" width="120" height="56" rx="8" fill="#0b3c7a"/><text x="640" y="134" font-weight="700" fill="#fff">MySQL 8</text><text x="640" y="152" font-size="9.5" fill="#d6e4f5">red interna</text>
+        <rect x="580" y="176" width="120" height="54" rx="8" fill="#fff" stroke="#2b5fa8"/><text x="640" y="198" font-weight="700" fill="#0b3c7a">Volumen</text><text x="640" y="215" font-size="9.5">storage/app (archivos)</text>
+      </g>
+      <g stroke="#2b5fa8" stroke-width="1.5" fill="none" marker-end="url(#f4)">
+        <line x1="120" y1="48" x2="167" y2="68"/>
+        <path d="M320,68 L450,68 L450,107"/>
+        <line x1="120" y1="178" x2="167" y2="178"/>
+        <line x1="320" y1="178" x2="347" y2="178"/>
+        <line x1="550" y1="138" x2="577" y2="138"/>
+        <line x1="550" y1="203" x2="577" y2="203"/>
+      </g>
+      <text x="378" y="62" font-size="9.5" fill="#5b6474">imagen nueva</text>
+    </svg>
+    <figcaption>Figura 6. Arquitectura de despliegue.</figcaption>
+  </figure>
+
+  <div class="grid2">
+    <div class="tarjeta">
+      <span class="etiqueta">Dockerfile multietapa</span><h4>Imagen pequeña y reproducible</h4>
+      <ol>
+        <li><b>vendor</b>: <code>composer install --no-dev</code> y publica assets de Filament.</li>
+        <li><b>assets</b>: Node 22 compila Tailwind y JS con Vite.</li>
+        <li><b>final</b>: solo PHP-FPM + Nginx con el código y <code>public/build</code>. Sin Node ni dependencias de desarrollo.</li>
+      </ol>
+    </div>
+    <div class="tarjeta">
+      <span class="etiqueta">En cada arranque</span><h4>Automatizado</h4>
+      <ul>
+        <li><code>storage:link</code>, <code>migrate --force</code> y <code>optimize</code>.</li>
+        <li>Seeder de las 12 categorías (idempotente) y <code>filament:optimize</code>.</li>
+        <li>Healthcheck: Traefik solo manda tráfico cuando el contenedor está sano.</li>
+      </ul>
+    </div>
+    <div class="tarjeta">
+      <span class="etiqueta">Configuración</span><h4>Variables de entorno</h4>
+      <p>La configuración (<code>APP_KEY</code>, <code>DB_*</code>, <code>APP_URL</code>) vive en Coolify, no en el repositorio. La imagen es la misma en cualquier servidor.</p>
+    </div>
+    <div class="tarjeta">
+      <span class="etiqueta">Persistencia</span><h4>Qué sobrevive a un redeploy</h4>
+      <p>La base de datos (recurso MySQL de Coolify) y el volumen <code>storage/app</code> con logotipos, fotos y documentos. El contenedor de la app se puede reemplazar sin perder nada.</p>
+    </div>
+  </div>
+  <div class="nota"><strong>Detalle técnico:</strong> Traefik termina el HTTPS y le pasa HTTP al contenedor. Por eso se activó <code>trustProxies</code> en <code>bootstrap/app.php</code>; sin él, Laravel generaría enlaces <code>http://</code> y el navegador bloquearía estilos y formularios.</div>
+</section>
+
+<!-- ============ 10. PRUEBAS ============ -->
+<section class="seccion">
+  <h2><span class="num">10</span>Pruebas y calidad</h2>
+  <p class="lead">121 pruebas de PHPUnit (327 aserciones) en verde. Corren sobre SQLite en memoria, así que no tocan la base real.</p>
+  <table>
+    <tr><th style="width:30%">Carpeta</th><th>Qué demuestra</th></tr>
+    <tr><td>tests/Feature/Services</td><td>Postulación única: servicio, doble envío e índice UNIQUE</td></tr>
+    <tr><td>tests/Feature/Models</td><td>Vigencia, filtros y búsqueda de vacantes</td></tr>
+    <tr><td>tests/Feature/Policies</td><td>Permisos por rol y por empresa</td></tr>
+    <tr><td>tests/Feature/Filament</td><td>Panel admin: acceso, formularios, acciones y PDF</td></tr>
+    <tr><td>tests/Feature/Http</td><td>Sitio público, autenticación, portales, CV, documentos, reportes y aislamiento entre empresas</td></tr>
+  </table>
+  <div class="grid2">
+    <div class="tarjeta"><span class="etiqueta">Estilo</span><h4>Laravel Pint</h4><p>Formato uniforme de todo el código PHP antes de cada commit.</p></div>
+    <div class="tarjeta"><span class="etiqueta">Verificación real</span><h4>Prueba del contenedor</h4><p>La imagen Docker se probó con un MySQL en contenedor: páginas, login, panel y descarga de PDF antes de publicar.</p></div>
+  </div>
+  <p style="margin-top:4mm">Comando para mostrarlo en vivo: <code>php artisan test --compact</code></p>
+</section>
+
+<!-- ============ 11. GUION ============ -->
+<section class="seccion">
+  <h2><span class="num">11</span>Guion sugerido y preguntas probables</h2>
+
+  <h3 style="margin-top:0">Guion de 10 minutos</h3>
+  <table>
+    <tr><th style="width:14%">Minuto</th><th style="width:30%">Tema</th><th>Qué mostrar</th></tr>
+    <tr><td>0–1</td><td>Problema y solución</td><td>Qué es la bolsa de trabajo y los tres roles</td></tr>
+    <tr><td>1–3</td><td>Arquitectura</td><td>Figura 1 y ciclo de petición (Figura 2)</td></tr>
+    <tr><td>3–5</td><td>Base de datos</td><td>Diagrama ER, índice UNIQUE y vigencia</td></tr>
+    <tr><td>5–8</td><td>Demo en vivo</td><td>Reclutador publica → alumno se postula (y falla el segundo intento) → reclutador acepta → admin genera PDF</td></tr>
+    <tr><td>8–9</td><td>Seguridad y despliegue</td><td>Cuatro capas, Docker + Coolify, HTTPS</td></tr>
+    <tr><td>9–10</td><td>Cierre</td><td>121 pruebas, aprendizajes, preguntas</td></tr>
+  </table>
+
+  <h3>Preguntas que pueden hacer</h3>
+  <div class="grid2">
+    <div>
+      <div class="pregunta"><b>¿Por qué Filament y Blade a la vez?</b><p>Filament resuelve el CRUD administrativo rápido; Blade demuestra el frontend propio. Ambos usan las mismas Policies y servicios.</p></div>
+      <div class="pregunta"><b>¿Qué pasa si un alumno hace doble clic al postularse?</b><p>Las dos peticiones pasan la validación, pero el servicio usa una transacción y el índice UNIQUE rechaza la segunda; se muestra “Ya te postulaste”.</p></div>
+      <div class="pregunta"><b>¿Cómo evitas que un reclutador vea datos de otra empresa?</b><p>Las Policies comparan <code>empresa_id</code> del registro con la del usuario, y hay pruebas automáticas de aislamiento.</p></div>
+      <div class="pregunta"><b>¿Por qué la vigencia no es una columna?</b><p>Depende de la fecha de hoy; guardarla obligaría a actualizarla con un cron. Se calcula con un scope y un índice compuesto.</p></div>
+    </div>
+    <div>
+      <div class="pregunta"><b>¿Dónde se guardan los documentos del CV?</b><p>En el disco privado, fuera de <code>public/</code>. Solo se descargan por un controlador que revisa la Policy.</p></div>
+      <div class="pregunta"><b>¿Por qué soft delete?</b><p>Dar de baja una vacante o empresa no debe borrar el historial de postulaciones ni romper los reportes.</p></div>
+      <div class="pregunta"><b>¿Por qué Docker?</b><p>La imagen incluye exactamente PHP 8.4, las extensiones y los assets compilados: se comporta igual en mi equipo y en el VPS.</p></div>
+      <div class="pregunta"><b>¿Qué pasa con los archivos en un redeploy?</b><p>Viven en un volumen persistente y la BD en su propio recurso; el contenedor se reemplaza sin perderlos.</p></div>
+    </div>
+  </div>
+
+  <div class="pie">Vinculación en Línea · Proyecto Final de Programación Web II · UPSLP · Otoño 2026 · José Gilberto Fajardo Zapata (182006)</div>
+</section>
+
+</body>
+</html>
