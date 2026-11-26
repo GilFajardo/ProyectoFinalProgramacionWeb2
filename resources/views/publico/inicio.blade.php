@@ -1,6 +1,6 @@
 @php
     $diapositivas = [
-        ['imagen' => 'banner-1.svg', 'etiqueta' => 'Bolsa de trabajo UPSLP', 'titulo' => 'Tu primer empleo empieza aquí', 'texto' => 'Encuentra vacantes, prácticas profesionales y estadías en empresas de San Luis Potosí.'],
+        ['imagen' => 'campus-upslp.webp', 'etiqueta' => 'Bolsa de trabajo UPSLP', 'titulo' => 'Tu primer empleo empieza aquí', 'texto' => 'Encuentra vacantes, prácticas profesionales y estadías en empresas de San Luis Potosí.'],
         ['imagen' => 'banner-2.svg', 'etiqueta' => 'Vinculación empresarial', 'titulo' => 'Conectamos talento con empresas', 'texto' => 'Las empresas publican vacantes y evalúan candidatos con un CV estructurado y verificable.'],
         ['imagen' => 'banner-3.svg', 'etiqueta' => 'Crece profesionalmente', 'titulo' => 'Construye un CV que destaque', 'texto' => 'Registra tu experiencia, formación, habilidades por área y documentos que avalen tu perfil.'],
     ];
@@ -15,6 +15,10 @@
                  x-transition:enter="transition-opacity duration-700" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                  class="absolute inset-0 -z-10" aria-hidden="true">
                 <img src="{{ asset('images/'.$diapositiva['imagen']) }}" alt="" class="size-full object-cover" width="1600" height="600" @if ($i > 0) loading="lazy" @endif fetchpriority="{{ $i === 0 ? 'high' : 'low' }}">
+                @if (! str_ends_with($diapositiva['imagen'], '.svg'))
+                    {{-- Las fotografías llevan un degradado para mantener legible el texto blanco. --}}
+                    <div class="absolute inset-0 bg-linear-to-r from-marca-950/90 via-marca-900/70 to-marca-900/20"></div>
+                @endif
             </div>
         @endforeach
 

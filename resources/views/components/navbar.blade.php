@@ -20,8 +20,10 @@
     </div>
 
     <nav class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8" aria-label="Navegación principal">
-        <a href="{{ route('inicio') }}" class="shrink-0" aria-label="Ir al inicio">
+        <a href="{{ route('inicio') }}" class="flex shrink-0 items-center gap-3" aria-label="Ir al inicio">
             <x-logo />
+            <img src="{{ asset('images/logo-upslp.png') }}" alt="Universidad Politécnica de San Luis Potosí"
+                 class="hidden h-10 w-auto border-l border-slate-200 pl-3 xl:block" width="363" height="153">
         </a>
 
         <ul class="hidden items-center gap-1 lg:flex">

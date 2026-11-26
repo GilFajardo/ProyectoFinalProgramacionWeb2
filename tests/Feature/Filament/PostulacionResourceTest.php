@@ -44,6 +44,21 @@ class PostulacionResourceTest extends TestCase
             ->assertFileDownloaded('cv-'.$postulacion->alumno->matricula.'.pdf');
     }
 
+    public function test_reporte_pdf_downloads_with_all_filters_applied(): void
+    {
+        $this->actingAs(User::factory()->admin()->create());
+        $postulacion = Postulacion::factory()->aceptada()->create();
+
+        Livewire::test(ListPostulaciones::class)
+            ->callAction('reportePdfPostulaciones', [
+                'empresa_id' => $postulacion->vacante->empresa_id,
+                'vacante_id' => $postulacion->vacante_id,
+                'estatus' => EstatusPostulacion::Aceptado->value,
+            ])
+            ->assertHasNoFormErrors()
+            ->assertFileDownloaded();
+    }
+
     public function test_estatus_tab_filters_postulaciones(): void
     {
         $this->actingAs(User::factory()->admin()->create());

@@ -11,6 +11,10 @@
             <p class="text-sm leading-relaxed text-marca-200">
                 Plataforma de la {{ $institucion['nombre'] }} que conecta a alumnos y egresados con empresas de la región.
             </p>
+            <a href="{{ $institucion['sitio_web'] }}" target="_blank" rel="noopener" class="inline-block rounded-xl bg-white p-2 transition hover:ring-2 hover:ring-acento-500">
+                <img src="{{ asset('images/logo-upslp-25.png') }}" alt="25 aniversario de la Universidad Politécnica de San Luis Potosí"
+                     class="h-24 w-auto" width="291" height="318" loading="lazy">
+            </a>
         </div>
 
         <nav aria-label="Navegación del pie de página">

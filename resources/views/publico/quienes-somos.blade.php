@@ -16,7 +16,10 @@
                     la construcción de un CV estructurado y el seguimiento transparente de cada postulación.
                 </p>
             </div>
-            <img src="{{ asset('images/banner-2.svg') }}" alt="Ilustración de una red de conexiones entre personas y empresas" class="aspect-video w-full rounded-2xl object-cover shadow-sm" loading="lazy" width="1600" height="600">
+            <figure>
+                <img src="{{ asset('images/campus-upslp.webp') }}" alt="Vista aérea nocturna del campus de la Universidad Politécnica de San Luis Potosí" class="aspect-video w-full rounded-2xl object-cover shadow-sm" loading="lazy" width="2000" height="1125">
+                <figcaption class="mt-2 text-center text-sm text-slate-500">Campus de la {{ config('upslp.institucion.nombre') }}.</figcaption>
+            </figure>
         </section>
 
         <section class="grid gap-5 md:grid-cols-3">

@@ -188,7 +188,12 @@ class ReporteService
         }
 
         if (filled($filtros['estatus'] ?? null)) {
-            $descripcion['Estatus'] = EstatusPostulacion::tryFrom($filtros['estatus'])?->getLabel() ?? $filtros['estatus'];
+            // Filament entrega el enum ya convertido; el portal del reclutador, el valor en texto.
+            $estatus = $filtros['estatus'] instanceof EstatusPostulacion
+                ? $filtros['estatus']
+                : EstatusPostulacion::tryFrom((string) $filtros['estatus']);
+
+            $descripcion['Estatus'] = $estatus?->getLabel() ?? (string) $filtros['estatus'];
         }
 
         if (filled($filtros['vacante_id'] ?? null)) {
